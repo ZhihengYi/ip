@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>IP</title>
+    <link rel="icon" href="logo.svg" />
+    <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0" />
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests" />
+    <meta name="referrer" content="no-referrer" />
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+</head>
+<style>
+    .flag {
+        display: inline-block;
+        height: 12px;
+    }
+</style>
+
+<body>
+    <span id="now">
+        <script>
+            setInterval("now.innerHTML=new Date()");
+        </script>
+    </span>
+    <ul>
+        <li>
+            <span>Sohu:</span>
+            <span id="sohu">searching... </span>
+        </li>
+
+        <li>
+            <span>Pconline:</span>
+            <span id="pconline">searching... </span>
+        </li>
+
+        <li>
+            <span>IPv6-test:</span>
+            <span id="ipv6-test">searching... </span>
+        </li>
+
+        <li>
+            <span>IP.sb:</span>
+            <span id="ipsb">searching... </span>
+        </li>
+
+        <li>
+            <span>IPify:</span>
+            <span id="ipify">searching... </span>
+        </li>
+
+        <li>
+            <span>Google:</span>
+            <span id="appspot">searching... </span>
+        </li>
+
+        <li>
+            <span>
+                <a rel="nofollow" href="https://ping.pe/" target="_blank">ping</a>&nbsp;&nbsp;&nbsp;
+                <a rel="nofollow" href="https://www.ipaddress.my/" target="_blank">MyIPAddress</a>&nbsp;&nbsp;&nbsp;
+                <a rel="nofollow" href="https://ip.tool.chinaz.com/" target="_blank">Chinaz.IP</a>&nbsp;&nbsp;&nbsp;
+                <a rel="nofollow" href="https://www.ipuu.net/#/home" target="_blank">IPUU</a>&nbsp;&nbsp;&nbsp;
+                <a rel="nofollow" href="https://api.map.baidu.com/lbsapi/getpoint/" target="_blank">BaiduMap</a>&nbsp;&nbsp;&nbsp;
+                <a rel="nofollow" href="https://www.speedtest.cn/" target="_blank">Speedtest</a>&nbsp;&nbsp;&nbsp;
+                <a href="javascript:window.location.reload();">reload</a>&nbsp;&nbsp;&nbsp;
+            </span>
+        </li>
+    </ul>
+
+    <!-- sohu -->
+    <script src="https://pv.sohu.com/cityjson?ie=utf-8"></script>
+    <script>
+        $("#sohu").html(
+            returnCitySN.cip +
+            "&nbsp;|&nbsp;" +
+            returnCitySN.cname +
+            "&nbsp;|&nbsp;" +
+            returnCitySN.cid
+        );
+    </script>
+    <script>
+        $(document).ready(function () {
+            //pconline
+            $.ajax({
+                url: "https://whois.pconline.com.cn/ipJson.jsp",
+                dataType: "jsonp",
+                timeout: 5000,
+                success: function (re) {
+                    $("#pconline").html(
+                        re.ip +
+                        "&nbsp;|&nbsp;" +
+                        // re.pro +
+                        // "&nbsp;|&nbsp;" +
+                        // re.proCode +
+                        // "&nbsp;|&nbsp;" +
+                        // re.city +
+                        // "&nbsp;|&nbsp;" +
+                        // re.cityCode +
+                        // "&nbsp;|&nbsp;" +
+                        // re.region +
+                        // "&nbsp;|&nbsp;" +
+                        // re.regionCode +
+                        // "&nbsp;|&nbsp;" +
+                        re.addr
+                    );
+                },
+                error: function () {
+                    $("#pconline").html("<font color='red'>链接失败</font>");
+                },
+                complete: function () { },
+            });
+            //ipv6-test
+            $.ajax({
+                url: "https://v4.ipv6-test.com/json/widgetdata.php",
+                dataType: "jsonp",
+                timeout: 5000,
+                success: function (re) {
+                    $("#ipv6-test").html(
+                        re.address +
+                        "&nbsp;|&nbsp;" +
+                        re.proto +
+                        // "&nbsp;|&nbsp;" +
+                        // re.country_code +
+                        "&nbsp;|&nbsp;" +
+                        re.country
+                    );
+                },
+                error: function () {
+                    $("#ipv6-test").html("<font color='red'>[error]404 Not Found</font>");
+                },
+                complete: function () { },
+            });
+            //ipsb
+            $.ajax({
+                url: "http://api.ip.sb/geoip",
+                dataType: "jsonp",
+                timeout: 5000,
+                success: function (re) {
+                    $("#ipsb").html(
+                        re.ip +
+                        "&nbsp;|&nbsp;" +
+                        re.country +
+                        // "&nbsp;|&nbsp;" +
+                        // re.country_code +
+                        "&nbsp;|&nbsp;(" +
+                        re.longitude +
+                        "," +
+                        re.latitude +
+                        ")&nbsp;|&nbsp;" +
+                        // re.timezone +
+                        // "&nbsp;|&nbsp;isp:" +
+                        // re.isp +
+                        // "&nbsp;|&nbsp;offset:" +
+                        // re.offset +
+                        // "&nbsp;|&nbsp;asn:" +
+                        // re.asn +
+                        // "&nbsp;|&nbsp;" +
+                        re.organization
+                        // "&nbsp;|&nbsp;" +
+                        // re.asn_organization +
+                        // "&nbsp;|&nbsp;" +
+                        // re.continent_code
+                    );
+                },
+                error: function () {
+                    $("#ipsb").html("<font color='red'>[error]404 Not Found</font>");
+                },
+                complete: function () { },
+            });
+            //ipify
+            $.ajax({
+                url: "https://api.ipify.org/?format=jsonp",
+                dataType: "jsonp",
+                timeout: 5000,
+                success: function (re) {
+                    $("#ipify").html(re.ip);
+                },
+                error: function () {
+                    $("#ipify").html("<font color='red'>[error]404 Not Found</font>");
+                },
+                complete: function () { },
+            });
+            //google
+            function ping(url) {
+                var img = new Image();
+                var start = new Date().getTime();
+                img.src = url + start;
+                var flag = false; //无法访问
+                img.onload = function () {
+                    flag = true;
+                    $("#appspot").html("<font color='green'>[success]200 OK</font>");
+                };
+                img.onerror = function () {
+                    flag = true;
+                    $("#appspot").html("<font color='red'>[error]404 Not Found</font>");
+                };
+                var timer = setTimeout(function () {
+                    if (!flag) {
+                        //如果真的无法访问
+                        flag = false;
+                        $("#appspot").html("<font color='red'>[error]404 Not Found</font>");
+                    }
+                }, 1000);
+            }
+            $.ajax({
+                url: "https://ipquery.et.r.appspot.com",
+                dataType: "jsonp",
+                timeout: 3000,
+                success: function (re) {
+                    $("#appspot").html(
+                        re.address +
+                        "&nbsp;|&nbsp;" +
+                        re.geographical +
+                        "&nbsp;&nbsp;" +
+                        re.flag
+                    );
+                },
+                error: function (re) {
+                    var d = new Date().getTime();
+                    ping("https://www.google.com/favicon.ico?t=" + d);
+                    //$("#appspot").html("<font color='red'>[error]404 Not Found</font>");
+                },
+                complete: function () { },
+            });
+        });
+    </script>
+</body>
+
+</html>
